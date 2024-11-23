@@ -36,8 +36,3 @@ def main():
 
                     db.commit()
 
-
-
-
-main()
-
