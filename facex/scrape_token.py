@@ -1,4 +1,4 @@
-import requests
+import requests, re
 
 class Scrape:
     def __init__(self, cookie: str=None, session: object=None) -> None:
