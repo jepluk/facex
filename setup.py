@@ -13,7 +13,8 @@ class PostInstallCommand(install):
 
 setup(
     name='facex',
-    version='0.1',
+    author='Ipan (zelvdsk)',
+    version='0.2',
     packages=find_packages(),
     install_requires=[
         'requests'
