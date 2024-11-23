@@ -10,7 +10,6 @@ def main():
     useragent.add_argument('-c', '--cookie', help='Set cookie and tokeb to the database.')
 
     parse = arg.parse_args()
-    print(parse)
     match parse.command:
         case 'set':
             if parse.useragents:
