@@ -1,7 +1,7 @@
 import sqlite3, time
-from .cli import DB_NAME
 
 def open():
+    from .cli import DB_NAME
     while True:
         try:
             conn = sqlite3.connect(DB_NAME, timeout=10)  # Timeout 10 detik
