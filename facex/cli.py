@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import argparse, os, sys, sqlite3
-from .sct import Token
 
 DB_DIR = os.path.expanduser('~/.facex')
 DB_NAME = os.path.join(DB_DIR, 'database.db')
@@ -34,6 +33,7 @@ def main():
     pars = parser.parse_args()
     match pars.action:
         case 'set':
+            from .sct import Token
             if pars.cookie:
                 Token(cookie=pars.cookie).adsmanager()
 
