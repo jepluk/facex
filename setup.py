@@ -8,7 +8,7 @@ class PostInstallCommand(install):
         install.run(self)
         
         target_path = '/data/data/com.termux/files/usr/bin/facex'
-        source_path = os.path.join(os.path.dirname(__file__), 'facex/facex/cli.py')
+        source_path = os.path.join(os.path.dirname(__file__), 'facex/cli.py')
         
         if not os.path.exists(target_path):
             shutil.copy(source_path, target_path)
