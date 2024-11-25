@@ -22,7 +22,7 @@ def main():
         db.commit()
 
     parser = argparse.ArgumentParser(prog='Facex', description='Facebook bruteforce attack using python cli.', epilog='Nyett')
-    action = parser.add_subparsers(title='action', dest='Action', required=True)
+    action = parser.add_subparsers(title='action', dest='action', required=True)
 
     dump = action.add_parser('dump')
     dump.add_argument('-t', '--target', help='Facebook id for get list friends.')
