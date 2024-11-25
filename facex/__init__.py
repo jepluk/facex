@@ -24,6 +24,7 @@ class Facebook:
         if next: a__i_ = self.session.get(next).json()
         else: a__i_ = self.session.get(f'https://graph.facebook.com/v16.0/{id}/friends?access_token={self.token}&fields=id,name').json()
 
+        print(a__i_)
         if a__i_['data']:
             try:
                 with sqlite3.connect(DB_NAME) as db:
