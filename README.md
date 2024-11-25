@@ -1,2 +1,0 @@
-# facex
-Facebook Bruteforce Attack.

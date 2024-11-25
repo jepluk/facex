@@ -4,12 +4,10 @@ from . import Facebook
 from .sct import Token
 
 DB_DIR = os.path.expanduser('~/.facex')
-#DB_NAME = os.path.join(DB_DIR, 'database.db')
-DB_NAME = '/sdcard/database.db'
+DB_NAME = os.path.join(DB_DIR, 'database.db')
 
 if not os.path.exists(DB_DIR):
     os.makedirs(DB_DIR)
-    print(DB_DIR)
 
 def main():
     with sqlite3.connect(DB_NAME) as db:
@@ -37,12 +35,21 @@ def main():
     match pars.action:
         case 'set':
             if pars.cookie:
-                tokens = Token(cookie=pars.cookie).adsmanager()
+                Token(cookie=pars.cookie).adsmanager()
+
+            elif pars.useragents:
                 with sqlite3.connect(DB_NAME) as db:
-                    c = db.cursor()
-                    c.execute('DELETE FROM user')
-                    c.execute('INSERT INTO user (cookie, token) VALUES (?,?)', (pars.cookie, tokens))
+                    c__ = db.cursor()
+                    c__.execute('DELETE FROM useragents')
+                    c__.execute('INSERT INTO useragents (ua) VALUES (?)', (pars.useragents, ))
                     db.commit()
+
+                    c__.execute('SELECT * FROM useragents')
+                    d__ua_ = c__.fetchall()
+
+
+                    print('[ INFO! ] Successfull add new Useragents.')
+                    print(f'[ INFO! ] Total {len(d__ua_)} Useragents.')
 
         case 'dump':
             Facebook().dump_friendlist(id=pars.target)
