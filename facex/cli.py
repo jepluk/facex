@@ -30,8 +30,10 @@ def main():
     run = action.add_parser('run')
 
     pars = parser.parse_args()
+    print(pars)
     match pars:
         case 'dump':
+            print('d')
             Facebook().dump_friendlist(id=str(pars.target))
 
         case 'run':
