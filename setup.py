@@ -1,30 +1,31 @@
-import os, shutil
-from setuptools import setup, find_packages
+import setuptools
+import os
+import shutil
 from setuptools.command.install import install
 
 class PostInstallCommand(install):
     def run(self):
         install.run(self)
+        
+        target_path = '/data/data/com.termux/files/usr/bin/facex'
+        source_path = os.path.join(os.path.dirname(__file__), 'facex/facex/cli.py')
+        
+        if not os.path.exists(target_path):
+            shutil.copy(source_path, target_path)
 
-        src_file = os.path.join(os.path.dirname(__file__), 'facex/cli.py')
-        dest_dir = '/data/data/com.termux/files/usr/bin/'
-        os.makedirs(dest_dir, exist_ok=True)
-        shutil.copy(src_file, dest_dir)
-
-setup(
-    name='facex',
-    author='Ipan (zelvdsk)',
-    version='0.2',
-    packages=find_packages(),
+setuptools.setup(
+    author='Ipan (Nyett)',
+    description='Facebook Bruteforce Attack.',
+    entry_points={'console_scripts': ['facex=facex.cli:main']},
     install_requires=[
-        'requests'
+        'requests',
+        'bs4'
     ],
-    entry_points={
-        'console_scripts': [
-            'facex=facex.cli:main',
-        ],
-    },
+    name='facex',
+    packages=setuptools.find_packages(),
     cmdclass={
-        'install': PostInstallCommand,
+        'install': PostInstallCommand,  # Menggunakan kelas custom untuk post-install
     },
+    version='1.0.0'
 )
+
