@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import argparse, os, sys, sqlite3
-from . import Facebook
 from .sct import Token
 
 DB_DIR = os.path.expanduser('~/.facex')
@@ -10,6 +9,7 @@ if not os.path.exists(DB_DIR):
     os.makedirs(DB_DIR)
 
 def main():
+    from . import Facebook
     with sqlite3.connect(DB_NAME) as db:
         cursor = db.cursor()
         cursor.execute('CREATE TABLE IF NOT EXISTS cache (id TEXT UNIQUE)')
