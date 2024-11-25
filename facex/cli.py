@@ -36,11 +36,11 @@ def main():
     match pars.action:
         case 'set':
             if pars.cookie:
-                tokens = token(cookie=parse.cookie)
+                tokens = token(cookie=pars.cookie)
                 with sqlite3.connect(DB_NAME) as db:
                     c = db.cursor()
                     c.execute('DELETE FROM user')
-                    c.execute('INSERT INTO user (cookie, token) VALUES (?,?)', (parse.cookie, tokens))
+                    c.execute('INSERT INTO user (cookie, token) VALUES (?,?)', (pars.cookie, tokens))
                     db.commit()
 
 
