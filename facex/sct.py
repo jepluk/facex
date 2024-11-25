@@ -46,6 +46,3 @@ class Token:
 
             sys.exit('\n[ WARN! ] Cookie Error!\n[ INFO! ] Please use old accounts for login.\n[ WARN! ] Please set cookie again. facez --cookie "cookie string"')
 
-x = Token('datr=g0VEZzg7dFHbuBgt4gu69MNE; sb=jUVEZxE7LpPcj-U0PFKDQ8HO; locale=id_ID; vpd=v1%3B609x320x1.8210935592651367; ps_l=1; ps_n=1; m_pixel_ratio=1; wd=395x753; c_user=100025676432150; fr=0Ga13XfNnKQh7HYqQ.AWWaxWpWySaykfXQqHwQukxP0UE.BnREWD..AAA.0.0.BnRFBr.AWUFqMpoZTE; xs=30%3A1NlxyDm0oEenaQ%3A2%3A1732530283%3A-1%3A11219; fbl_st=100623212%3BT%3A28875504; wl_cbv=v2%3Bclient_version%3A2681%3Btimestamp%3A1732530284')
-print(x.adsmanager())
-print(x.oauth())
