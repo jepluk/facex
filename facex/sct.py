@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import re, sqlite3, sys, requests
-from .config import DB_PATH
+from .cli import DB_NAME
 from .db import open
 
 class Token:
@@ -14,7 +14,7 @@ class Token:
 
         try:
             token = re.search('"(EAAB.*?)";', redirect).group(1)
-            with sqlite3.connect(DB_PATH) as db:
+            with sqlite3.connect(DB_NAME) as db:
                 c__ = db.cursor()
                 try:
                     c__.execute('DELETE FROM user')
@@ -25,7 +25,7 @@ class Token:
 
             print(f'\n[ INFO! ] Fetch token successfull.')
         except AttributeError:
-            with sqlite3.connect(DB_PATH) as db:
+            with sqlite3.connect(DB_NAME) as db:
                 try:
                     db.cursor().execute('DELETE FROM user')
                     db.commit()
