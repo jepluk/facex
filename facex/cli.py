@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 import argparse, os, sys, sqlite3
-from . import Facebook
-
+from . import Facebook, token
 DB_DIR = os.path.expanduser('~/.facex')
 #DB_NAME = os.path.join(DB_DIR, 'database.db')
 DB_NAME = '/sdcard/database.db'
@@ -28,17 +27,21 @@ def main():
     dump.add_argument('-t', '--target', help='Facebook id for get list friends.')
 
     run = action.add_parser('run')
+    set = action.add_parser('set')
+    set.add_argument('-c', '--cookie', help='Login.')
+    set.add_argument('-ua', '--useragents', help='Add new useragents.')
 
     pars = parser.parse_args()
     print(pars)
     match pars.action:
-        case 'dump':
-            print('d')
-            Facebook().dump_friendlist(id=str(pars.target))
-
-        case 'run':
-            Facebook().crack()
-
+        case 'set':
+            if pars.cookie:
+                tokens = token(cookie=parse.cookie)
+                with sqlite3.connect(DB_NAME) as db:
+                    c = db.cursor()
+                    c.execute('DELETE FROM user')
+                    c.execute('INSERT INTO user (cookie, token) VALUES (?,?)', (parse.cookie, tokens))
+                    db.commit()
 
 
 
