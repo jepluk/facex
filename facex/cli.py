@@ -34,7 +34,6 @@ def main():
     set.add_argument('-ua', '--useragents', help='Add new useragents.')
 
     pars = parser.parse_args()
-    print(pars)
     match pars.action:
         case 'set':
             if pars.cookie:
@@ -47,6 +46,9 @@ def main():
 
         case 'dump':
             Facebook().dump_friendlist(id=pars.target)
+
+        case 'run':
+            Facebook().crack()
 
 
 
