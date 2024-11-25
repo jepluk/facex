@@ -116,7 +116,7 @@ class Facebook:
 
                 with t__pe_(max_workers=5) as t__:
                     for x_ in password:
-                        c__rk_ = t__.submit(self.__login_method, id, x_)
+                        c__rk_ = self.__login_method(id, x_)
                         
                 s__ +=1
                 x__.execute('SELECT * FROM success')
