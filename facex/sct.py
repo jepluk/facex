@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import re, sqlite3, sys, requests
-from .cli import DB_NAME
 from .db import open
 
 class Token:
@@ -9,6 +8,7 @@ class Token:
         self.ses.cookies['cookie'] = cookie
 
     def adsmanager(self) -> str:
+        from .cli import DB_NAME
         source = self.ses.get('https://www.facebook.com/adsmanager/manage/campaigns').text
         redirect = self.ses.get(re.search(r'\.replace\("(.*?)"\)', source).group(1).replace('\\', '')).text
 
