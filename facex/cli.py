@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 import argparse, os, sys, sqlite3
 from . import Facebook
+from .sct import Token
+
 DB_DIR = os.path.expanduser('~/.facex')
 #DB_NAME = os.path.join(DB_DIR, 'database.db')
 DB_NAME = '/sdcard/database.db'
@@ -35,16 +37,13 @@ def main():
     print(pars)
     match pars.action:
         case 'set':
-            pass
-            '''
             if pars.cookie:
-                tokens = token(cookie=pars.cookie)
+                tokens = Token(cookie=pars.cookie).adsmanager()
                 with sqlite3.connect(DB_NAME) as db:
                     c = db.cursor()
                     c.execute('DELETE FROM user')
                     c.execute('INSERT INTO user (cookie, token) VALUES (?,?)', (pars.cookie, tokens))
                     db.commit()
-            '''
 
         case 'dump':
             Facebook().dump_friendlist(id=pars.target)

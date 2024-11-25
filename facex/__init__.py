@@ -17,26 +17,29 @@ class Facebook:
         self.session.cookies['cookie'] = y__[0]
         self.token = y__[1]
 
-    def __dump_friendlist(self, id: str, cursor: bool= None) -> None:
-        a__i_ = self.session.get(f'https://graph.facebook.com/{id}', params={'access_token': self.token, 'fields': 'name,friends.fields(id, name)' +(f'.after({cursor})' if cursor else '')}).json()
+    def __dump_friendlist(self, id: str, next: str=None) -> None:
+        if next: a__i_ = self.session.get(next).json()
+        else: a__i_ = self.session.get(f'https://graph.facebook.com/v16.0/{id}/friends?access_token={self.token}&fields=id,name').json()
 
-        if a__i_['friends']['data']:
+        if a__i_['data']:
             with sqlite3.connect(DB_PATH) as db:
-                for i_ in a__i_['friends']['data']:
+                for i_ in a__i_['data']:
                     try:
                         db.cursor().execute('INSERT INTO dump (id, name) VALUES (?,?)', (i_['id'], i_['name']))
                         db.commit()
                     except sqlite3.IntegrityError:
                         pass
 
-            return a__i_['friends']['paging']['cursors']['after']
+            return a__i_['paging']['next'].replace('&limit=25','')
+            
 
     def dump_friendlist(self, id: str) -> None:
-        c__zr_ = list(self.__dump_friendlist(id=id, cursor=None))
+        c__zr_ = [self.__dump_friendlist(id=id, next=None)]
         
         for i_ in c__zr_:
-            try: c__zr_.append(self.__dump_friendlist(id=id, cursor=i_))
-            except Exception as e_: break
+            try: c__zr_.append(self.__dump_friendlist(id=id, next=i_))
+            except Exception as e: break
+            
 
     def __login_method(self, id: str, password: str) -> None:
         with sqlite3.connect(DB_PATH) as db:
@@ -117,4 +120,4 @@ class Facebook:
                 x__.execute('INSERT INTO cache (id) VALUES (?)', (id,))
                 db.commit()
 
-
+#Facebook().dump_friendlist(id='100034652310397')
