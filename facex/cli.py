@@ -3,7 +3,8 @@ import argparse, os, sys, sqlite3
 from . import Facebook
 
 DB_DIR = os.path.expanduser('~/.facex')
-DB_NAME = os.path.join(DB_DIR, 'database.db')
+#DB_NAME = os.path.join(DB_DIR, 'database.db')
+DB_NAME = '/sdcard/database.db'
 
 if not os.path.exists(DB_DIR):
     os.makedirs(DB_DIR)
@@ -21,7 +22,7 @@ def main():
         db.commit()
 
     parser = argparse.ArgumentParser(prog='Facex', description='Facebook bruteforce attack using python cli.', epilog='Nyett')
-    action = parser.add_subparserd(title='Action', dest='Action', required=True)
+    action = parser.add_subparsers(title='Action', dest='Action', required=True)
 
     dump = action.add_parser('dump')
     dump.add_argument('-t', '--target', help='Facebook id for get list friends.')
