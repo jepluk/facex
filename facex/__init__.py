@@ -28,17 +28,15 @@ class Facebook:
             try:
                 with sqlite3.connect(DB_NAME) as db:
                     try:
-                        for i_ in a__i_['data']:
-                            try:
-                                db.cursor().execute('INSERT INTO dump (id, name) VALUES (?,?)', (i_['id'], i_['name']))
-                                db.commit()
-                                print(f'[ INFO! ] User ={i_["id"]}({i_["name"]}) successfull add to the database.')
-                            except sqlite3.IntegrityError:
-                                pass
-                            except Exception as e:
-                                pass
+                        db.cursor().execute('INSERT INTO dump (id, name) VALUES (?,?)', (i_['id'], i_['name']))
+                        db.commit()
+                        print(f'[ INFO! ] User ={i_["id"]}({i_["name"]}) successfull add to the database.')
+                    except sqlite3.IntegrityError:
+                        pass
+                    except Exception as e:
+                        pass
                         
-                        db.close()
+                    db.close()
             except sqlite3.OperationalError:
                 open()
 
