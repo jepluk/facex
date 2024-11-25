@@ -43,6 +43,9 @@ def main():
                     c.execute('INSERT INTO user (cookie, token) VALUES (?,?)', (pars.cookie, tokens))
                     db.commit()
 
+        case 'dump':
+            Facebook().dump_friendlist(id=pars.target)
+
 
 
 if __name__ == "__main__":
